@@ -1,0 +1,42 @@
+Rohan has a special love for the matrices especially for the first element of the matrix. Being good at Mathematics, he also loves to solve the different problem on the matrices. So one day he started to multiply the matrix with the original matrix.  The elements of the original matrix are given by a00=1 , a01=1, a10=1, a11=0.
+Given the power of the matrix, n calculate the an and return the a10 element mod 1000000007.
+
+Example 1:
+
+Input: n = 3
+Output: 2 
+Explanation: Take the cube of the original matrix 
+i.e a3 and the first element(a10) is 2.
+
+
+
+def matrixPower(mat, n, MOD):
+    if n == 1:
+        return mat
+    if n % 2 == 0:
+        half_pow = matrixPower(mat, n // 2, MOD)
+        return multiplyMatrices(half_pow, half_pow, MOD)
+    else:
+        half_pow = matrixPower(mat, n // 2, MOD)
+        return multiplyMatrices(multiplyMatrices(half_pow, half_pow, MOD), mat, MOD)
+
+def multiplyMatrices(mat1, mat2, MOD):
+    a00 = (mat1[0][0] * mat2[0][0] + mat1[0][1] * mat2[1][0]) % MOD
+    a01 = (mat1[0][0] * mat2[0][1] + mat1[0][1] * mat2[1][1]) % MOD
+    a10 = (mat1[1][0] * mat2[0][0] + mat1[1][1] * mat2[1][0]) % MOD
+    a11 = (mat1[1][0] * mat2[0][1] + mat1[1][1] * mat2[1][1]) % MOD
+
+    return [[a00, a01], [a10, a11]]
+
+def findAn(n, MOD):
+    if n == 0:
+        return 0
+    original_matrix = [[1, 1], [1, 0]]
+    powered_matrix = matrixPower(original_matrix, n - 1, MOD)
+    return powered_matrix[1][0]
+
+# Example
+n = 3
+MOD = 1000000007
+result = findAn(n, MOD)
+print(result)
